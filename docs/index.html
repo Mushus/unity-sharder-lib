@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>unity-sharder-lib</title>
+</head>
+<body>
+    <canvas id="universe"></canvas>
+    <script type="x-shader/x-vertex" id="universe-vs">
+        #version 300 es
+
+        in vec2 particlePosition;
+
+        void main() {
+          gl_PointSize = 2.0;
+          gl_Position = vec4(particlePosition, 0.0, 1.0);
+        }
+    </script>
+    <script type="x-shader/x-fragment" id="universe-fs">
+        #version 300 es
+
+        precision highp float;
+
+        out vec4 fragColor;
+
+        void main() {
+          fragColor = vec4(1.0);
+        }
+    </script>
+    <script>
+        'use strict';
+        (() => {
+            const vertexSharder = document.getElementById('universe-vs').text;
+            const fragmentSharder = document.getElementById('universe-fs').text;
+            const width = 720;
+            const height = 360;
+            const elem = document.getElementById('universe');
+            elem.width = width;
+            elem.height = height;
+            const ctx = elem.getContext('webgl2');
+
+            const stars = new Array(10).fill(null).map(
+                () => {
+                    for (;;) {
+                        const y = Math.random();
+                        const hrizontalLength = Math.sin(y * Math.PI);
+                        const x = Math.random();
+                        if (x > hrizontalLength) continue;
+                        const power = Math.random();
+                        return [hrizontalLength === 0 ? 0 : x / hrizontalLength, y, power];
+                    }
+                }
+            );
+
+            gl.clearColor(0.0, 0.0, 0.0, 1.0);
+        })();
+        /*const skyToXyz = (sx, sy) => {
+            const y = Math.cos(sy * Math.PI);
+            const xzlen = Math.sin(sy * Math.PI);
+            const x = xzlen * Math.cos(sx * Math.PI);
+            const z = xzlen * Math.sin(sx * Math.PI);
+            return [x, y, z];
+        };
+        const dbl = a => a * a;
+        const width = 720;
+        const height = 360;
+        const elem = document.querySelector("#universe");
+        const ctx = elem.getContext('2d');
+
+        // stars
+        const stars = new Array(10).fill(null).map(
+            () => {
+                for (;;) {
+                    const y = Math.random();
+                    const hrizontalLength = Math.sin(y * Math.PI);
+                    const x = Math.random();
+                    if (x > hrizontalLength) continue;
+                    const power = Math.random();
+                    return [hrizontalLength === 0 ? 0 : x / hrizontalLength, y, power];
+                }
+            }
+        );
+
+        const starPos = stars.map(([x, y]) => skyToXyz(x, y));
+
+        const universe = ctx.createImageData(width, height);
+        for (let y = 0; y < height; y++) {
+            for (let x = 0; x < width; x++) {
+                const [dx, dy, dz] = skyToXyz(x, y);
+                console.log([dx, dy, dz]);
+                const i = (y * width + x) * 4;
+                let brightness = 0;
+                for (let k = 0; k < starPos.length; k++) {
+                    const [sx, sy, sz] = starPos[k];
+                    const length = Math.sqrt(dbl(dx - sx) + dbl(dy - sy) + dbl(dz - sz));
+                    console.log([sx, sy, sz]); break;
+                    brightness += Math.pow(0.5, length * 20);
+                }
+                if (brightness > 1) brightness = 1;
+                brightness *= 255;
+                universe.data[i + 0] = brightness;
+                universe.data[i + 1] = brightness;
+                universe.data[i + 2] = brightness;
+                universe.data[i + 3] = 255;
+            }
+        }
+        console.log(universe);
+        ctx.putImageData(universe, 0, 0);
+        */
+    </script>
+</body>
+</html>

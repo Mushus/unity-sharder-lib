@@ -29,13 +29,11 @@
 			struct appdata
 			{
 				float4 vertex : POSITION;
-				float2 uv : TEXCOORD0;
 			};
 			
 			struct v2f
 			{
 				float4 vertex  : SV_POSITION;
-				float2 uv : TEXCOORD0;
 				float4 grabPos : TEXCOORD1;
 			};
 
@@ -51,7 +49,6 @@
 				float4 viewPos = mul(UNITY_MATRIX_V, worldCoord) + float4(vpos, 0);
 				o.vertex = mul(UNITY_MATRIX_P, viewPos);
 				o.vertex.z = 1;
-				o.uv = v.uv;
 				o.grabPos = ComputeGrabScreenPos(o.vertex);
 				return o;
 			}
