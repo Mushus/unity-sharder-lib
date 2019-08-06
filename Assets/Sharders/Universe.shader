@@ -24,14 +24,12 @@
 			struct appdata
 			{
 				float4 vertex : POSITION;
-				float2 uv : TEXCOORD0;
 			};
 
 			struct v2f
 			{
-				float2 uv : TEXCOORD0;
 				float4 vertex : SV_POSITION;
-				float3 worldPos : TEXCOORD1;
+				float3 worldPos : TEXCOORD0;
 			};
 
 			sampler2D _MainTex;
@@ -42,7 +40,6 @@
 				v2f o;
 				o.vertex = UnityObjectToClipPos(v.vertex);
 				o.worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
-				o.uv = TRANSFORM_TEX(v.uv, _MainTex);
 				return o;
 			}
 			
